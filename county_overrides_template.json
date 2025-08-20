@@ -1,0 +1,23 @@
+{
+  "Hennepin": {
+    "beta": {
+      "Unemp_Norm": 0.9,
+      "Evict_Norm": 1.2
+    },
+    "gamma": {
+      "BenefitUptake": 0.8
+    },
+    "thresholds": {
+      "AG_down": 0.28,
+      "GA_up": 0.36
+    }
+  },
+  "Ramsey": {
+    "beta": {
+      "Food_Norm": 1.1
+    },
+    "gamma": {
+      "OutreachIntensity": 0.7
+    }
+  }
+}
