@@ -1,9 +1,4 @@
-"""
-FIRST Dynamic System Module
-EWMA latent risk + RAG hysteresis + simulate per-geo
-"""
 import numpy as np
-import pandas as pd
 
 def sigmoid(x): return 1/(1+np.exp(-x))
 
@@ -29,10 +24,8 @@ class FirstDynamicModel:
 
     def rag_transition(self, f, last):
         th=self.thresholds
-        if last=="Red":
-            return "Amber" if f < th["RA_down"] else "Red"
-        if last=="Green":
-            return "Amber" if f > th["GA_up"] else "Green"
+        if last=="Red":   return "Amber" if f < th["RA_down"] else "Red"
+        if last=="Green": return "Amber" if f > th["GA_up"] else "Green"
         if f > th["AR_up"]: return "Red"
         if f < th["AG_down"]: return "Green"
         return "Amber"
@@ -40,9 +33,8 @@ class FirstDynamicModel:
     def simulate(self, df, f0=None, rag0="Amber"):
         out = df.copy().reset_index(drop=True)
         F=[]; RAG=[]
-        # Seed with first composite if f0 not provided
         first_row = out.iloc[0] if len(out) else {}
-        f_prev = float(self.composite_index(first_row)) if f0 is None else float(f0)
+        f_prev = self.composite_index(first_row) if f0 is None else float(f0)
         rag_prev = rag0
         for _, row in out.iterrows():
             f_next = self.next_F(f_prev, row)
@@ -51,3 +43,4 @@ class FirstDynamicModel:
             f_prev, rag_prev = f_next, rag
         out["F_t"]=F; out["RAG"]=RAG
         return out
+
